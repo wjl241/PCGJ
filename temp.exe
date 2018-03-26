@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>页面丢失了</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta content="telephone=no" name="format-detection" />
+		<meta content="email=no" name="format-detection" />
+		<link rel="stylesheet" href="css/error.css" />
+		<script src="js/jquery-1.10.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/swipe.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="swap">
+			<div class="error-img">
+				<!--<img width="100%" src="images/background.png" alt="img"/>-->
+				<h1>404</h1>
+				<h3>您访问的页面出错啦 ( T﹏T )</h3>
+				<h2>别着急，您往下看...</h2>
+				<img class="ball" width="100%" src="images/star1.png" alt="img"/>
+			</div>
+			<!--搜索-->
+			<div class="search-box">
+				<div class="defalut prompt">百度一下</div>
+				<input class="search-input" type="text"  OnInput="OnPropChanged(event)"/>
+				<div class="search-btn"></div>
+			</div>
+			<!--广告-->
+			<div class="advertisement_box">
+				<div id="jiaodiantu">
+					<div class='swipe-wrap'>
+			            <div><img src=""/></div>
+				        <div><img src=""/></div>
+				        <div><img src=""/></div>				        
+				    </div>
+				    <ul class="xiaoyuandian">
+				       	<li class="cur"></li>
+				        <li></li>
+				        <li></li>				        
+				    </ul>
+				</div>
+				
+				<span>广告</span>
+			</div>
+			<!--新闻-->
+			<div class="news-box">
+				<p class="p-title">大家都在看</p>
+				<div class="simple-info">
+					<a class="sim" href="">
+						<p></p>
+						<p>
+							<img src="" width="28%"/>
+							<img src="" width="28%"/>
+							<img src="" width="28%"/>
+						</p>
+						<p class="loca-date"><span></span><span class="data"></span></p>
+					</a>
+				</div>
+			</div>
+			<div class="footer">
+				<div class='mail' style="text-align:center;display: none;">
+							<img  height="20px"  src="http://img.139site.cn/mail.jpg"/>
+						</div>
+						<div class="fx" style="display: none">
+							<p><i></i><span class="fetion-name">
+						免费玩飞信短信随心发！
+					</span></p>
+						</div>
+			<a href="http://m.139site.com/" target="_blank">139site.com</a> | 浙ICP备09002090号-12</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+	(function($) {
+	    //扩展这个方法到jquery
+	    $.fn.extend({
+	        //插件名字
+	        pluginname: function() {
+	            //遍历匹配元素的集合
+	            return this.each(function() {
+	            	var $prompt = $(this).find('.prompt'),
+	            	$seachBtn = $(this).find('.search-btn'),
+	            	$seachInput = $(this).find('.search-input');
+	            	/*input获取焦点*/
+					$seachInput.focus(function(){
+						$prompt.addClass('bcbcbc').removeClass('defalut');
+						getRedian();
+						$seachBtn.show();
+						$('.footer').hide();
+					});
+					$prompt.bind('click',function(){
+						$seachInput.focus();
+					});
+					$seachInput.blur(function(){
+						$('.footer').show();
+					});
+					/*input失去焦点*/
+				/*	$seachInput.focus(function(){
+						$defalut.html('请输入要搜索的内容').addClass('defalut').removeClass('bcbcbc');
+						$seachBtn.show();
+					});*/
+	            });
+	        }
+	    });
+	})(jQuery);
+	
+	$(function(){
+		$(".error-img").height($(window).height() - 380);
+		$(".search-box").pluginname();
+	})
+	function OnPropChanged (event) {
+        if($('.search-input').val() == '' || $('.search-input').val() == null){
+			$('.prompt').show();
+		}else{
+			$('.prompt').hide();
+}
+}
+
+var elem = document.getElementById('jiaodiantu');
+window.mySwipe = Swipe(elem, {
+	//1s一次轮播
+	continuous:true,
+	auto: 3000,
+	callback: function(index, element) {
+		$(".xiaoyuandian li").eq(index).addClass("cur").siblings().removeClass("cur");
+	}
+});
+var len = $(".xiaoyuandian li").length;
+$(".xiaoyuandian").width(15*len);
+var wid = $(".xiaoyuandian").width();
+var jdd = $("#jiaodiantu").width();
+var posi = (jdd - wid + 10)/2;
+
+$(".xiaoyuandian").css({
+	"left":posi
+})
+
+$(".xiaoyuandian li").click(
+	function() {
+		mySwipe.slide($(this).index());
+	}
+);
+
+function getUrlParam(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  unescape(r[2]); 
+     return null;
+}
+var 	city,
+err,
+fm,
+fm_mx='',
+err_errorcode='',
+err_error_url='',
+city_href='';
+$(document).ready(function() {
+	var e='', ew='',t='',rd='';
+	if(getUrlParam('e')!=null){
+		e=getUrlParam('e');
+	}
+	if(getUrlParam('ew')!=null){
+		 ew=getUrlParam('ew');
+	}
+	if(getUrlParam('t')!=null){
+		 t=getUrlParam('t');
+	}
+	$.ajax( {
+		url : "./getFilter.la",
+		type : "post",
+		data : {
+			'e' : e,
+			'ew' : ew,
+			't' : t,
+		},
+		dataType : 'json',
+		success : function(result) {
+		city = result.cm;
+		fm = result.fmm;
+		err = result.em;
+// $(".email-link").attr("href","wapHref?cpage=1&ord=&site=&st=&city="+city.cityname+"&cityId="+city.cityId+"&ec="+err.errorcode+"&t="+err.errorcode+"&href=http://mail.10086.cn/");
+		if(city.href!=null){
+			city_href=city.href;
+		}
+		if(err.errorParm!=null && err.errorParm!=""){
+			city_href = "dns" + city_href;
+		}
+		
+		if(err.errorcode!=null && err.errorcode!="" && err.errorcode!=200){
+			err_errorcode = err.errorcode;
+			city_href = "errorcode" + city_href;
+		}
+		if(err.errorUrl!=null && err.errorUrl!=""){
+			err_error_url = err.errorUrl;
+		}
+		if(fm!=null && fm.mx!=null){
+			fm_mx = fm.mx;
+		}
+		$.ajax( {
+			url : "./wapPageVisit?url="+city_href.replace("index","err")+"&referer="+fm_mx+"&e="+err_errorcode+"&p=&game=&read=&video=&music=&eurl="+err_error_url,
+			type : "post",
+			success : function() {
+		}
+		})
+		if(true){
+			if(fm!=null && fm.htmlText != '' && fm.htmlText != null){
+				$(".fx").show();
+				$(".fetion-name").html(fm.htmlText);
+				$(".fetion-name a").bind("click", function() {
+					$.ajax( {
+						url : "./click.la?cpage=1&ord=&site=&st=166&city="+city.cityname+"&cityId="+city.cityId+"&ec="+err.errorcode+"&t="+err.errorcode+"&module=错误页飞信",
+						type : "get",
+						success : function() {
+						}
+					});
+				});
+			}
+			if(fm!=null && fm.mailHtml != '' && fm.mailHtml != null){
+				$(".mail").show();
+				$(".mail img").after(fm.mailHtml);
+				$(".mail a").bind("click", function() {
+					$.ajax( {
+						url : "./click.la?cpage=1&ord=&site=&st=168&city="+city.cityname+"&cityId="+city.cityId+"&ec="+err.errorcode+"&t="+err.errorcode+"&module=错误页邮箱",
+						type : "get",
+						success : function() {
+						}
+					});
+				});
+			}
+		}
+		if((err.errorParm!=null && err.errorParm!="") ||(err.errorcode!=null && err.errorcode!=""&& err.errorcode!=200)){
+			var str = '';
+			$(".error-img h1").html(err.errorcode!="200"?err.errorcode:"404");
+			//$("#error").html(err.errorInfo+str);
+			//$("#error").show();
+		}
+		}
+	});
+	$(".search-btn").click(function(){
+		var href = "";
+		var searchWord = "";
+		if($(".search-input").val()=="" || $(".search-input").val()== null){
+			searchWord = $(".prompt").html();
+		}else{
+			searchWord = $(".search-input").val();
+		}
+//	 href = "http://m.baidu.com/s?from="
+//				+ DBPoolListener.channelid + "&action=opensearch&word="
+//				+ word;
+//		href = "https://yz.m.sm.cn/s?q="+searchWord+"&from=ws280219";
+//		href = "http://m.baidu.com/s?word="+escape(searchWord)+"&from=1015772a";
+		//if(city.cityId=='571' || city.cityId==571){
+			href = "http://m.baidu.com/s?word="+searchWord+"&from=1018910c";
+		//}
+		$(".search-input").val('');
+		opens('60',href,'','1001');
+	});
+	getNews();
+	getGdt();
+})
+
+//新闻模块
+function getNews(){
+$.ajax( {
+	url : "./getConfigData.la",
+	type : "post",
+	data : {"model" : "news16"},
+	dataType : 'json',
+	success : function(result) {
+		$(".simple-info a").attr("href","javascript:opens(\""+result[0].stId+"0\",\""+result[0].siteHref+"\",\""+result[0].orderNum+"\",\""+result[0].siteId+"\");");
+		$(".simple-info a p:eq(0)").html(result[0].siteTxt);
+		$(".simple-info img:eq(0)").attr('src',result[0].siteImg.split(',')[0]);
+		$(".simple-info img:eq(0)").height($(".simple-info img:eq(0)").width()*0.63);
+		$(".simple-info img:eq(1)").attr('src',result[0].siteImg.split(',')[1]);
+		$(".simple-info img:eq(1)").height($(".simple-info img:eq(1)").width()*0.63);
+		$(".simple-info img:eq(2)").attr('src',result[0].siteImg.split(',')[2]);
+		$(".simple-info img:eq(2)").height($(".simple-info img:eq(2)").width()*0.63);
+		$(".simple-info a .loca-date span:eq(0)").html(result[0].introduce);
+		$(".simple-info a .loca-date span:eq(1)").html(result[0].mmintroduce);
+	}
+});
+}
+//搜索
+function getRedian(){
+	$.ajax( {
+		url : "./getConfigData.la",
+		type : "post",
+		data : {"model" : "baidu16"},
+		dataType : 'json',
+		success : function(result) {
+			var i = parseInt(Math.random()*9);
+			$(".prompt").html(result[i].siteTxt);
+	}
+	});
+}
+//滚动图
+function getGdt(){
+	$.ajax( {
+		url : "./getConfigData.la",
+		type : "post",
+		data : {"model" : "errorGdt16"},
+		dataType : 'json',
+		success : function(result) {
+			for(i=0;i<result.length;i++){
+				$(".advertisement_box .swipe-wrap img:eq("+i+")").attr("src",result[i].siteImg);
+				$(".advertisement_box .swipe-wrap img:eq("+i+")").attr("onclick","opens(\""+result[i].stId+"\",\""+result[i].siteHref+"\",\""+result[i].orderNum+"\",\""+result[i].siteId+"\");");
+			}
+	}
+	});
+}
+function opens(stId,href,ord,siteId){
+	$.ajax( {
+		url : "./click.la?cpage=1&ord="+ord+"&site="+siteId+"&st="+stId+"&city="+city.cityname+"&cityId="+city.cityId+"&ec="+err.errorcode+"&t="+err.errorcode,
+		type : "get",
+		success : function() {
+		if(stId==1700){
+			//window.location.href='http://m.139site.com/nav.html?href='+escape(href);
+			window.location.href="http://m.139site.com/index.html";
+		}else{
+			window.location.href=href;
+		}
+	}
+	});
+}
+	</script>
+</html>
